@@ -1,0 +1,23 @@
+[[package]]
+category = "main"
+description = "Pika Python AMQP Client Library"
+name = "pika"
+optional = false
+python-versions = "*"
+version = "1.1.0"
+
+[[package]]
+category = "main"
+description = "pretty logging"
+name = "pretty-logging"
+optional = false
+python-versions = "*"
+version = "1.0.1"
+
+[metadata]
+content-hash = "e32849e60a816ef12457c7fc3643884675f2f4efb7bfdbbc2cdbf4c1775f8101"
+python-versions = "^3.7"
+
+[metadata.hashes]
+pika = ["4e1a1a6585a41b2341992ec32aadb7a919d649eb82904fd8e4a4e0871c8cf3af", "9fa76ba4b65034b878b2b8de90ff8660a59d925b087c5bb88f8fdbb4b64a1dbf"]
+pretty-logging = ["a9a54048603cd9ebc2a348314d706a1dcb127633c4e4ad5c5a0dd28e3ed5c050"]
