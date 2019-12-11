@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "rabbit-rpc-py"
-version = "0.1.0"
+version = "0.2.0"
 description = "amqp rabbit rpc"
 authors = ["Arvin <arvintian8@gmail.com>"]
 
