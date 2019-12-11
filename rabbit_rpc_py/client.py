@@ -100,35 +100,29 @@ class Client(object):
             ch.basic_reject(method.delivery_tag, requeue=False)
 
     @property
-    def connect(self):
+    def channel(self):
         if self._conn and self._conn.is_open:
-            return self._conn
+            if self._channel and self._channel.is_open:
+                return self._channel
+            else:
+                self._channel = self._conn.channel()
+                return self._channel
         else:
             self._conn = pika.BlockingConnection(self._parameters)
-            return self._conn
-
-    @property
-    def channel(self):
-        if self._channel and self._channel.is_open:
+            self._channel = self._conn.channel()
             return self._channel
-        else:
-            self._channel = self.connect.channel()
-            return self._channel
-
-    @property
-    def callback_connect(self):
-        if self._callback_conn and self._callback_conn.is_open:
-            return self._callback_conn
-        else:
-            self._callback_conn = pika.BlockingConnection(self._parameters)
-            return self._callback_conn
 
     @property
     def callback_channel(self):
-        if self._callback_channel and self._callback_channel.is_open:
-            return self._callback_channel
+        if self._callback_conn and self._callback_conn.is_open:
+            if self._callback_channel and self._callback_channel.is_open:
+                return self._callback_channel
+            else:
+                self._callback_channel = self._callback_conn.channel()
+                return self._callback_channel
         else:
-            self._callback_channel = self.callback_connect.channel()
+            self._callback_conn = pika.BlockingConnection(self._parameters)
+            self._callback_channel = self._callback_conn.channel()
             return self._callback_channel
 
     def _start(self):
