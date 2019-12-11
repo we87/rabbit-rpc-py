@@ -5,7 +5,7 @@ description = "amqp rabbit rpc"
 authors = ["Arvin <arvintian8@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.5"
 pretty-logging = "^1.0"
 pika = "^1.1"
 
