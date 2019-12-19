@@ -60,16 +60,8 @@ class Client(object):
             return error(msg="invoke error 0")
         self._callback_lock.release()
         try:
-            self.channel.basic_publish(
-                exchange='',
-                routing_key=self._rpc_queue,
-                properties=pika.BasicProperties(
-                    reply_to=self._callback_queue,
-                    correlation_id=corr_id,
-                ),
-                body=json.dumps(params))
+            self._publish(corr_id, params)
         except Exception as e:
-            pretty_logger.error(traceback.format_exc())
             return error(msg="invoke error 1")
         # result
         try:
@@ -98,6 +90,28 @@ class Client(object):
         except Exception as e:
             pretty_logger.error("rpc client callback error {}".format(traceback.format_exc()))
             ch.basic_reject(method.delivery_tag, requeue=False)
+
+    def _publish(self, corr_id, payload):
+        retry = 0
+        while True:
+            retry += 1
+            try:
+                self.channel.basic_publish(
+                    exchange='',
+                    routing_key=self._rpc_queue,
+                    properties=pika.BasicProperties(
+                        reply_to=self._callback_queue,
+                        correlation_id=corr_id,
+                    ),
+                    body=json.dumps(payload))
+                break
+            except Exception as e:
+                self._channel = None
+                self._conn = None
+                if retry < 3:
+                    pretty_logger.error(traceback.format_exc())
+                else:
+                    raise e
 
     @property
     def channel(self):
